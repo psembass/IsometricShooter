@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
-public class InputHandler : MonoBehaviour, IInputHandler
+public class InputHandler : IInputHandler
 {
-    [SerializeField]
     private InputActionAsset inputActions;
     private InputAction moveAction;
 
-    private void Start()
+    public InputHandler(InputActionAsset inputActions)
     {
+        this.inputActions = inputActions;
+
         inputActions.FindActionMap("Player").Enable();
         moveAction = inputActions.FindAction("Move");
     }

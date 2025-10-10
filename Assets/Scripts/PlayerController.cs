@@ -1,16 +1,21 @@
 using UnityEngine;
+using Zenject;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float MovementSpeed = 3f;
-    [SerializeField]
-    private InputHandler InputHandler;
+    private IInputHandler InputHandler;
     private CharacterController _characterController;
     private Camera _camera;
 
     private float MoveThreshold = 0.001f;
 
+    [Inject]
+    private void Construct(IInputHandler inputHandler)
+    {
+        InputHandler = inputHandler;
+    }
 
     private void Awake()
     {
