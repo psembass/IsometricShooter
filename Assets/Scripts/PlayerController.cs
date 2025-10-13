@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
 public class PlayerController : MonoBehaviour
@@ -38,5 +39,31 @@ public class PlayerController : MonoBehaviour
             moveVector = moveVector.normalized;
             _characterController.Move(MovementSpeed * Time.deltaTime * moveVector);
         }
+        // Rotate character to aim direction
+        Vector3 aimDirection = getAimDirection();
+        Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
+        transform.rotation = targetRotation;
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 aimDirection = getAimDirection();
+        Gizmos.DrawLine(transform.position, transform.position + aimDirection);
+    }
+
+    // Returnw aim direction normalized
+    private Vector3 getAimDirection()
+    {
+        Vector2 look = InputHandler.LookAxis();
+        Ray ray = _camera.ScreenPointToRay(look);
+        Plane plane = new Plane(Vector3.up, transform.position);
+        float rayDistance;
+        if (plane.Raycast(ray, out rayDistance))
+        {
+            Vector3 point = ray.GetPoint(rayDistance);
+            return (point - transform.position).normalized;
+        }
+        return Vector3.zero;
     }
 }
