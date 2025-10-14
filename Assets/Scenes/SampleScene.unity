@@ -524,6 +524,7 @@ GameObject:
   - component: {fileID: 520084446}
   - component: {fileID: 520084445}
   - component: {fileID: 520084444}
+  - component: {fileID: 520084448}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -625,6 +626,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &520084448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520084443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4015ec6d91c1449a5dbd877a6c4b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  maxHealth: 100
 --- !u!1 &709111388
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Camera _camera;
 
     private float MoveThreshold = 0.001f;
+    private IWeapon currentWeapon;
 
     [Inject]
     private void Construct(IInputHandler inputHandler)
@@ -21,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        currentWeapon = new HitscanWeapon();
+        currentWeapon.SetOwner(transform);
     }
 
     void Start()
@@ -40,20 +43,24 @@ public class PlayerController : MonoBehaviour
             _characterController.Move(MovementSpeed * Time.deltaTime * moveVector);
         }
         // Rotate character to aim direction
-        Vector3 aimDirection = getAimDirection();
+        Vector3 aimDirection = GetAimDirection();
         Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
         transform.rotation = targetRotation;
-
+        if (InputHandler.isFiring())
+        {
+            // attack using current weapon
+            currentWeapon.Attack(aimDirection);
+        }
     }
 
     private void OnDrawGizmos()
     {
-        Vector3 aimDirection = getAimDirection();
+        Vector3 aimDirection = GetAimDirection();
         Gizmos.DrawLine(transform.position, transform.position + aimDirection);
     }
 
-    // Returnw aim direction normalized
-    private Vector3 getAimDirection()
+    // Returns aim direction normalized
+    private Vector3 GetAimDirection()
     {
         Vector2 look = InputHandler.LookAxis();
         Ray ray = _camera.ScreenPointToRay(look);
