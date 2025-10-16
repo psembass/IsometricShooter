@@ -4,11 +4,11 @@ using UnityEngine;
 public class HitscanWeapon : IWeapon
 {
     private Transform _transform;
-    private float maxDistance = 5f;
+    private float maxDistance = 10f;
     private float damage = 20f;
     private float lastShootTime = 0;
 
-    private float shootRate = 0.5f;
+    private float shootRate = 0.2f;
     
     private RaycastHit[] raycastHits = new RaycastHit[10];
 
@@ -21,7 +21,7 @@ public class HitscanWeapon : IWeapon
         int hitCount = Physics.RaycastNonAlloc(ray, raycastHits, maxDistance);
         for (int i = 0; i < hitCount; i++)
         {
-            Debug.DrawRay(_transform.position, direction * maxDistance, Color.blue, 3);
+            Debug.DrawRay(_transform.position, direction * maxDistance, Color.blue, 2);
             raycastHits[i].collider.TryGetComponent<IDamageable>(out IDamageable damageable);
             damageable?.TakeDamage(damage);
         }

@@ -1,18 +1,24 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(HealthComponent))]
 public class Enemy : MonoBehaviour
 {
     private NavMeshAgent agent;
-    [SerializeField] // todo set from code
+    private HealthComponent healthComponent;
     private Transform playerTransform;
     private Vector3 lastDestination = Vector3.zero;
     private float destinationThreshold = 0.01f;
 
-    void Start()
+    public event Action<GameObject> OnDeath;
+
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        healthComponent = GetComponent<HealthComponent>();
+        healthComponent.OnDeath += HandleDeath;
     }
 
     void Update()
@@ -24,4 +30,16 @@ public class Enemy : MonoBehaviour
             agent.SetDestination(playerPos);
         }
     }
+
+    public void SetPlayerTransform(Transform playerTransform)
+    {
+        this.playerTransform = playerTransform;
+    }
+
+    public void Reset()
+    {
+        healthComponent.Restore();
+    }
+
+    private void HandleDeath() => OnDeath?.Invoke(gameObject);
 }

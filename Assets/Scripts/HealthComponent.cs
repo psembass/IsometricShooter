@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, IDamageable
@@ -5,6 +6,8 @@ public class HealthComponent : MonoBehaviour, IDamageable
     [SerializeField]
     private float maxHealth = 100f;
     private float currentHealth;
+
+    public event Action OnDeath;
 
     void Start()
     {
@@ -20,13 +23,12 @@ public class HealthComponent : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            onDeath();
+            OnDeath?.Invoke();
         }
     }
 
-    private void onDeath()
+    public void Restore()
     {
-        // todo death actions, animation, return to pool
-        gameObject.SetActive(false);
+        currentHealth = maxHealth;
     }
 }
