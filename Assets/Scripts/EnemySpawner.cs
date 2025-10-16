@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -7,7 +8,6 @@ public class EnemySpawner : MonoBehaviour
     private GameObject enemyPrefab;
     [SerializeField]
     private int maxEnemies = 10;
-    [SerializeField]
     private GameObject player;
     private int enemyCount = 0;
 
@@ -64,5 +64,10 @@ public class EnemySpawner : MonoBehaviour
     public bool CanSpawnEnemy()
     {
         return enemyCount < maxEnemies;
+    }
+
+    public void SetPlayerController(GameObject player)
+    {
+        this.player = player;
     }
 }

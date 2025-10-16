@@ -5,4 +5,6 @@ public interface IWeapon
     void SetOwner(Transform transform);
 
     void Attack(Vector3 direction);
+
+    void SetTargetMask(LayerMask mask);
 }

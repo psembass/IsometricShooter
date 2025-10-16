@@ -2,12 +2,15 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;
 
+[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(HealthComponent))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float MovementSpeed = 3f;
     private IInputHandler InputHandler;
     private CharacterController _characterController;
+    private HealthComponent _healthComponent;
     private Camera _camera;
 
     private float MoveThreshold = 0.001f;
@@ -22,8 +25,17 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _healthComponent = GetComponent<HealthComponent>();
         currentWeapon = new HitscanWeapon();
         currentWeapon.SetOwner(transform);
+        _healthComponent.OnDeath += OnPlayerDeath;
+    }
+
+    private void OnPlayerDeath()
+    {
+        Debug.Log("Game over");
+        // todo game over logic - send to game manager
+        Time.timeScale = 0f; // stop game
     }
 
     void Start()

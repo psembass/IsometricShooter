@@ -11,14 +11,19 @@ public class Enemy : MonoBehaviour
     private Transform playerTransform;
     private Vector3 lastDestination = Vector3.zero;
     private float destinationThreshold = 0.01f;
-
+    private IWeapon weapon = new MeleeWeapon();
     public event Action<GameObject> OnDeath;
+    private float attackRate = 0.5f;
+    private float lastAttackTime = 0;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         healthComponent = GetComponent<HealthComponent>();
         healthComponent.OnDeath += HandleDeath;
+        // Enemy must attack only the player
+        weapon.SetOwner(transform);
+        weapon.SetTargetMask(LayerMask.GetMask("Player"));
     }
 
     void Update()
@@ -28,6 +33,12 @@ public class Enemy : MonoBehaviour
         if (lastDestination == Vector3.zero || (playerPos-lastDestination).magnitude > destinationThreshold)
         {
             agent.SetDestination(playerPos);
+        }
+        // attack if we can
+        if (Time.time - lastAttackTime > attackRate)
+        {
+            weapon.Attack(playerPos);
+            lastAttackTime = Time.time;
         }
     }
 

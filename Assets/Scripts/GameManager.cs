@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -10,11 +11,13 @@ public class GameManager : MonoBehaviour
     private float lastSpawnTime = 0;
     [SerializeField]
     private GameObject levelPlane;
+    [SerializeField]
+    private PlayerController playerController;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
         enemySpawner = GetComponent<EnemySpawner>();
+        enemySpawner.SetPlayerController(playerController.GameObject());
     }
 
     // Update is called once per frame

@@ -9,6 +9,7 @@ public class HitscanWeapon : IWeapon
     private float lastShootTime = 0;
 
     private float shootRate = 0.2f;
+    private LayerMask targetMask;
     
     private RaycastHit[] raycastHits = new RaycastHit[10];
 
@@ -22,6 +23,7 @@ public class HitscanWeapon : IWeapon
         for (int i = 0; i < hitCount; i++)
         {
             Debug.DrawRay(_transform.position, direction * maxDistance, Color.blue, 2);
+            // todo check layer mask
             raycastHits[i].collider.TryGetComponent<IDamageable>(out IDamageable damageable);
             damageable?.TakeDamage(damage);
         }
@@ -30,5 +32,10 @@ public class HitscanWeapon : IWeapon
     public void SetOwner(Transform transform)
     {
         _transform = transform;
+    }
+
+    public void SetTargetMask(LayerMask mask)
+    {
+        targetMask = mask;
     }
 }
