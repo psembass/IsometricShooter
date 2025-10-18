@@ -1,0 +1,8 @@
+#HealthBar .unity-progress-bar__progress {
+    background-color: rgb(300, 0, 0);
+    border-radius: 4px;
+}
+
+#HealthBar .unity-progress-bar__title {
+    color: white;
+}

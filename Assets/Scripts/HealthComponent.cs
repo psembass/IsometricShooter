@@ -3,32 +3,35 @@ using UnityEngine;
 
 public class HealthComponent : MonoBehaviour, IDamageable
 {
-    [SerializeField]
-    private float maxHealth = 100f;
-    private float currentHealth;
+    [field: SerializeField]
+    public float MaxHealth { get; private set; } = 100f;
+    public float CurrentHealth { get; private set; }
 
     public event Action OnDeath;
+    public event Action<float> OnChanged;
 
-    void Start()
+    void Awake()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = MaxHealth;
     }
 
     public void TakeDamage(float damage)
     {
-        if (currentHealth > 0)
+        if (CurrentHealth > 0)
         {
-            currentHealth -= damage;
+            CurrentHealth -= damage;
         }
-        if (currentHealth <= 0)
+        OnChanged?.Invoke(CurrentHealth);
+        if (CurrentHealth <= 0)
         {
-            currentHealth = 0;
+            CurrentHealth = 0;
             OnDeath?.Invoke();
         }
     }
 
     public void Restore()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = MaxHealth;
+        OnChanged?.Invoke(CurrentHealth);
     }
 }
