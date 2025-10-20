@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 [RequireComponent(typeof(EnemySpawner))]
@@ -13,11 +14,35 @@ public class GameManager : MonoBehaviour
     private GameObject levelPlane;
     [SerializeField]
     private PlayerController playerController;
+    [SerializeField]
+    private UIManager uiManager;
 
     private void Awake()
     {
         enemySpawner = GetComponent<EnemySpawner>();
         enemySpawner.SetPlayerController(playerController.GameObject());
+    }
+
+    private void Start()
+    {
+        playerController.OnDeath += GameOver;
+        UIEvents.OnRestart += Restart;
+    }
+
+    private void GameOver()
+    {
+        // stop the game
+        Time.timeScale = 0f;
+        // stop player input
+        playerController.IsPaused = true;
+        uiManager.ShowGameOverMenu();
+    }
+    private void Restart()
+    {
+        // todo reload enemies and player state etc
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+        playerController.IsPaused = false;
     }
 
     // Update is called once per frame

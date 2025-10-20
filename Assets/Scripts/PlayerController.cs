@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using UnityEngine.UIElements;
 using Zenject;
 
@@ -15,6 +16,9 @@ public class PlayerController : MonoBehaviour
 
     private float MoveThreshold = 0.001f;
     private IWeapon currentWeapon;
+    public bool IsPaused { get; set; } = false;
+
+    public event Action OnDeath;
 
     [Inject]
     private void Construct(IInputHandler inputHandler)
@@ -33,9 +37,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnPlayerDeath()
     {
-        Debug.Log("Game over");
-        // todo game over logic - send to game manager
-        Time.timeScale = 0f; // stop game
+        OnDeath?.Invoke();
     }
 
     void Start()
@@ -46,6 +48,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!Application.isPlaying || IsPaused)
+        {
+            return;
+        }
         Vector2 moveAxis = InputHandler.MoveAxis();
         if (moveAxis.magnitude > MoveThreshold)
         {
@@ -67,6 +73,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!Application.isPlaying || IsPaused)
+        {
+            return;
+        }
         Vector3 aimDirection = GetAimDirection();
         Gizmos.DrawLine(transform.position, transform.position + aimDirection);
     }
