@@ -6,6 +6,10 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField]
     private UIDocument gameOverMenu;
+    [SerializeField]
+    private UIDocument hud;
+
+    private Label killCountLabel;
 
     private void Start()
     {
@@ -13,6 +17,8 @@ public class UIManager : MonoBehaviour
         Button restartButton = gameOverMenu.rootVisualElement.Q<Button>("RestartButton");
         restartButton.clicked += RestartButtonClicked;
         gameOverMenu.rootVisualElement.style.display = DisplayStyle.None;
+
+        killCountLabel = hud.rootVisualElement.Q<Label>("KillCountLabel");
     }
 
     public void ShowGameOverMenu()
@@ -24,5 +30,10 @@ public class UIManager : MonoBehaviour
     {
         gameOverMenu.rootVisualElement.style.display = DisplayStyle.None;
         UIEvents.RestartButtonClicked(); // send event outside
+    }
+
+    internal void UpdateKillCount(int enemyKilled)
+    {
+        killCountLabel.text = "Kill Count: "+enemyKilled;
     }
 }

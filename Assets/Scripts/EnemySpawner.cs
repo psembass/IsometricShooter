@@ -12,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
     private int enemyCount = 0;
 
     private IObjectPool<GameObject> enemyPool;
+    public event Action OnEnemyKilled;
 
     void Start()
     {
@@ -48,6 +49,7 @@ public class EnemySpawner : MonoBehaviour
     {
         enemy.SetActive(false);
         enemyCount--;
+        OnEnemyKilled?.Invoke();
         Debug.Log("Enemy count: " + enemyCount);
     }
 

@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private UIManager uiManager;
 
+    private int enemyKilled = 0;
+
     private void Awake()
     {
         enemySpawner = GetComponent<EnemySpawner>();
@@ -25,8 +27,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Subscribe to game events
         playerController.OnDeath += GameOver;
         UIEvents.OnRestart += Restart;
+        enemySpawner.OnEnemyKilled += HandleEnemyKilled;
+        uiManager.UpdateKillCount(enemyKilled);
+    }
+
+    private void HandleEnemyKilled()
+    {
+        enemyKilled++;
+        uiManager.UpdateKillCount(enemyKilled);
     }
 
     private void GameOver()
@@ -40,6 +51,7 @@ public class GameManager : MonoBehaviour
     private void Restart()
     {
         // todo reload enemies and player state etc
+        enemyKilled = 0;
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;
         playerController.IsPaused = false;
