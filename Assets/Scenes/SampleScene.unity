@@ -128,7 +128,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 144493968}
-  - component: {fileID: 144493967}
   - component: {fileID: 144493966}
   m_Layer: 0
   m_Name: GameManager
@@ -149,24 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a7c7cef27fb2c429e06045fb2ff1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  enemySpawnRate: 1
   levelPlane: {fileID: 332334692}
-  playerController: {fileID: 709111394}
-  uiManager: {fileID: 385680028}
---- !u!114 &144493967
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144493965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb1a5abb330d43c488a3f7a893f05ec0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 1746269522279315138, guid: e8b57cb138288c5479f44dd8908b088e, type: 3}
-  maxEnemies: 30
 --- !u!4 &144493968
 Transform:
   m_ObjectHideFlags: 0
@@ -785,7 +767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9948d0e5708b9e44e964a725f101bf16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  MovementSpeed: 3
 --- !u!143 &709111395
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1269,7 +1250,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc2ac266afb64e418947a1ca2103b10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameInstaller
+  _config: {fileID: 11400000, guid: 844ac9a1ddab4294f9015f8d3f5c9a12, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  enemyPrefab: {fileID: 7901065436908291816, guid: e8b57cb138288c5479f44dd8908b088e, type: 3}
+  player: {fileID: 709111394}
+  uIManager: {fileID: 385680028}
+  levelPlane: {fileID: 332334692}
 --- !u!114 &1356305248
 MonoBehaviour:
   m_ObjectHideFlags: 0

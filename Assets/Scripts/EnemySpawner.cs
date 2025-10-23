@@ -2,26 +2,27 @@ using System;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner
 {
-    [SerializeField]
-    private GameObject enemyPrefab;
-    [SerializeField]
+    private Enemy enemyPrefab;
     private int maxEnemies = 10;
-    private GameObject player;
+    private Transform targetTransform;
     private int enemyCount = 0;
 
     private IObjectPool<GameObject> enemyPool;
     public event Action OnEnemyKilled;
 
-    void Start()
+    public EnemySpawner(Enemy enemyPrefab, GameConfig gameConfig, IPlayer player)
     {
+        this.enemyPrefab = enemyPrefab;
+        this.maxEnemies = gameConfig.maxEnemies;
+        this.targetTransform = player.Transform;
         // Init Enemy pool
         enemyPool = new ObjectPool<GameObject>(
             () => CreateEnemy(),
             obj => OnGetEnemy(obj),
             obj => OnReleaseEnemy(obj),
-            obj => Destroy(obj),
+            obj => GameObject.Destroy(obj),
             false,
             maxEnemies,
             maxEnemies
@@ -30,9 +31,9 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject CreateEnemy()
     {
-        GameObject enemyObject = Instantiate(enemyPrefab, transform.position, Quaternion.identity, transform);
+        GameObject enemyObject = GameObject.Instantiate(enemyPrefab.gameObject);
         Enemy enemy = enemyObject.GetComponent<Enemy>();
-        enemy.SetPlayerTransform(player.transform);
+        enemy.SetPlayerTransform(targetTransform);
         enemy.OnDeath += ReturnToPool;
         return enemyObject;
     }
@@ -66,10 +67,5 @@ public class EnemySpawner : MonoBehaviour
     public bool CanSpawnEnemy()
     {
         return enemyCount < maxEnemies;
-    }
-
-    public void SetPlayerController(GameObject player)
-    {
-        this.player = player;
     }
 }

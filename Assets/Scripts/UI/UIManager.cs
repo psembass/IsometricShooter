@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
 
     private Label killCountLabel;
 
-    private void Start()
+    private void Awake()
     {
         VisualElement rootVisualElement = gameOverMenu.rootVisualElement;
         Button restartButton = gameOverMenu.rootVisualElement.Q<Button>("RestartButton");

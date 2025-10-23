@@ -3,26 +3,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
 
-[RequireComponent(typeof(EnemySpawner))]
 public class GameManager : MonoBehaviour
 {
     private EnemySpawner enemySpawner;
-    [SerializeField]
     private float enemySpawnRate = 2f;
     private float lastSpawnTime = 0;
-    [SerializeField]
     private GameObject levelPlane;
-    [SerializeField]
     private PlayerController playerController;
-    [SerializeField]
     private UIManager uiManager;
 
     private int enemyKilled = 0;
 
-    private void Awake()
+    [Inject]
+    void Construct(GameConfig gameConfig, EnemySpawner enemySpawner, PlayerController player, UIManager uiManager, [Inject(Id = "LevelPlane")] GameObject levelPlane)
     {
-        enemySpawner = GetComponent<EnemySpawner>();
-        enemySpawner.SetPlayerController(playerController.GameObject());
+        this.enemySpawner = enemySpawner;
+        this.playerController = player;
+        this.uiManager = uiManager;
+        this.enemySpawnRate = gameConfig.enemySpawnRate;
+        this.levelPlane = levelPlane;
     }
 
     private void Start()

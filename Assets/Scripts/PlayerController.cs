@@ -5,9 +5,8 @@ using Zenject;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(HealthComponent))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayer
 {
-    [SerializeField]
     private float MovementSpeed = 3f;
     private IInputHandler InputHandler;
     private CharacterController _characterController;
@@ -18,12 +17,15 @@ public class PlayerController : MonoBehaviour
     private IWeapon currentWeapon;
     public bool IsPaused { get; set; } = false;
 
+    public Transform Transform => transform;
+
     public event Action OnDeath;
 
     [Inject]
-    private void Construct(IInputHandler inputHandler)
+    private void Construct(IInputHandler inputHandler, GameConfig gameConfig)
     {
         InputHandler = inputHandler;
+        MovementSpeed = gameConfig.PlayerMovementSpeed;
     }
 
     private void Awake()
