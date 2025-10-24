@@ -13,9 +13,9 @@ public class HitscanWeapon : IWeapon
     
     private RaycastHit[] raycastHits = new RaycastHit[10];
 
-    public void Attack(Vector3 direction)
+    public bool Attack(Vector3 direction)
     {
-        if (Time.time < lastShootTime + shootRate) { return; }
+        if (Time.time < lastShootTime + shootRate) { return false; }
         // todo check if weapon can shoot, i.e. bullets left
         lastShootTime = Time.time;
         Ray ray = new Ray(_transform.position, direction);
@@ -27,6 +27,7 @@ public class HitscanWeapon : IWeapon
             raycastHits[i].collider.TryGetComponent<IDamageable>(out IDamageable damageable);
             damageable?.TakeDamage(damage);
         }
+        return true;
     }
 
     public void SetOwner(Transform transform)

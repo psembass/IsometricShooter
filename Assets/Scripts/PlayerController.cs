@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     private CharacterController _characterController;
     private HealthComponent _healthComponent;
     private Camera _camera;
+    private Animator animator;
 
     private float MoveThreshold = 0.001f;
     private IWeapon currentWeapon;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour, IPlayer
         currentWeapon = new HitscanWeapon();
         currentWeapon.SetOwner(transform);
         _healthComponent.OnDeath += OnPlayerDeath;
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void OnPlayerDeath()
@@ -55,13 +57,16 @@ public class PlayerController : MonoBehaviour, IPlayer
             return;
         }
         Vector2 moveAxis = InputHandler.MoveAxis();
+        Vector3 motion = Vector3.zero;
         if (moveAxis.magnitude > MoveThreshold)
         {
             Vector3 moveVector = _camera.transform.TransformDirection(moveAxis);
             moveVector.y = 0;
             moveVector = moveVector.normalized;
-            _characterController.Move(MovementSpeed * Time.deltaTime * moveVector);
+            motion = MovementSpeed * Time.deltaTime * moveVector;
+            _characterController.Move(motion);
         }
+        animator.SetFloat("Speed", motion.magnitude);
         // Rotate character to aim direction
         Vector3 aimDirection = GetAimDirection();
         Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
@@ -69,7 +74,10 @@ public class PlayerController : MonoBehaviour, IPlayer
         if (InputHandler.isFiring())
         {
             // attack using current weapon
-            currentWeapon.Attack(aimDirection);
+            if (currentWeapon.Attack(aimDirection))
+            {
+                animator.SetTrigger("Shoot");
+            }
         }
     }
 

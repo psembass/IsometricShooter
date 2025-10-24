@@ -9,8 +9,9 @@ public class MeleeWeapon : IWeapon
     private float attackDamage = 10f;
     private LayerMask targetMask;
 
-    public void Attack(Vector3 direction)
+    public bool Attack(Vector3 direction)
     {
+        bool attacked = false;
         Vector3 position = Owner.position;
         Collider[] colliders = Physics.OverlapSphere(Owner.position, attackRange, targetMask);
         foreach (var item in colliders)
@@ -22,8 +23,10 @@ public class MeleeWeapon : IWeapon
                 IDamageable target;
                 item.GameObject().TryGetComponent(out target);
                 target?.TakeDamage(attackDamage);
+                attacked = true;
             }
         }
+        return attacked;
     }
 
     public void SetOwner(Transform transform)
