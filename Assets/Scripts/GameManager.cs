@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
         UIEvents.OnRestart += Restart;
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
+        // todo Testing
+        enemySpawner.SpawnEnemy(new Vector3(0, 0, 5));
+        lastSpawnTime = Time.time;
     }
 
     private void HandleEnemyKilled()
