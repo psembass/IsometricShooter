@@ -1,5 +1,6 @@
-using UnityEngine;
 using System;
+using System.Drawing;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;
 
@@ -7,12 +8,15 @@ using Zenject;
 [RequireComponent(typeof(HealthComponent))]
 public class PlayerController : MonoBehaviour, IPlayer
 {
+    [SerializeField]
+    private GameObject weaponBarrel;
     private float MovementSpeed = 3f;
     private IInputHandler InputHandler;
     private CharacterController _characterController;
     private HealthComponent _healthComponent;
     private Camera _camera;
     private Animator animator;
+    private LineRenderer lineRenderer;
 
     private float MoveThreshold = 0.001f;
     private IWeapon currentWeapon;
@@ -34,9 +38,10 @@ public class PlayerController : MonoBehaviour, IPlayer
         _characterController = GetComponent<CharacterController>();
         _healthComponent = GetComponent<HealthComponent>();
         currentWeapon = new HitscanWeapon();
-        currentWeapon.SetOwner(transform);
+        currentWeapon.SetOwner(weaponBarrel.transform);
         _healthComponent.OnDeath += OnPlayerDeath;
         animator = GetComponentInChildren<Animator>();
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     private void OnPlayerDeath()
@@ -69,8 +74,8 @@ public class PlayerController : MonoBehaviour, IPlayer
         animator.SetFloat("Speed", motion.magnitude);
         // Rotate character to aim direction
         Vector3 aimDirection = GetAimDirection();
-        Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
-        transform.rotation = targetRotation;
+        transform.forward = aimDirection;
+        RenderAim(aimDirection);
         if (InputHandler.isFiring())
         {
             // attack using current weapon
@@ -94,15 +99,33 @@ public class PlayerController : MonoBehaviour, IPlayer
     // Returns aim direction normalized
     private Vector3 GetAimDirection()
     {
+        Vector3 start = transform.position;
         Vector2 look = InputHandler.LookAxis();
         Ray ray = _camera.ScreenPointToRay(look);
-        Plane plane = new Plane(Vector3.up, transform.position);
+        Plane plane = new Plane(Vector3.up, start);
         float rayDistance;
         if (plane.Raycast(ray, out rayDistance))
         {
             Vector3 point = ray.GetPoint(rayDistance);
-            return (point - transform.position).normalized;
+            return (point - start).normalized;
         }
         return Vector3.zero;
+    }
+
+    private void RenderAim(Vector3 aimDirection)
+    {
+        Vector3 raycastPoint = weaponBarrel.transform.position;
+        Vector3 endPoint;
+        lineRenderer.SetPosition(0, raycastPoint);
+        float distance = 20f;
+        if (Physics.Raycast(raycastPoint, aimDirection, out RaycastHit hit, distance))
+        {
+            endPoint = hit.point;
+        }
+        else
+        {
+            endPoint = raycastPoint + new Vector3(aimDirection.x * distance, aimDirection.y, aimDirection.z * distance);
+        }
+        lineRenderer.SetPosition(1, endPoint);
     }
 }

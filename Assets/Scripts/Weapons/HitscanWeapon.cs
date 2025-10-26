@@ -4,7 +4,7 @@ using UnityEngine;
 public class HitscanWeapon : IWeapon
 {
     private Transform _transform;
-    private float maxDistance = 10f;
+    private float maxDistance = 15f;
     private float damage = 20f;
     private float lastShootTime = 0;
 
@@ -22,7 +22,6 @@ public class HitscanWeapon : IWeapon
         int hitCount = Physics.RaycastNonAlloc(ray, raycastHits, maxDistance);
         for (int i = 0; i < hitCount; i++)
         {
-            Debug.DrawRay(_transform.position, direction * maxDistance, Color.blue, 2);
             // todo check layer mask
             raycastHits[i].collider.TryGetComponent<IDamageable>(out IDamageable damageable);
             damageable?.TakeDamage(damage);
