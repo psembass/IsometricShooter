@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(HealthComponent))]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     private NavMeshAgent agent;
     private HealthComponent healthComponent;
@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
         weapon.SetOwner(transform);
         weapon.SetTargetMask(LayerMask.GetMask("Player"));
         animator = GetComponentInChildren<Animator>();
+        Debug.Log("Animator " + animator);
     }
 
     void Update()
@@ -75,5 +76,10 @@ public class Enemy : MonoBehaviour
     public void OnDeathAnimationComplete()
     {
         OnDeath?.Invoke(gameObject);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        healthComponent.TakeDamage(damage);
     }
 }

@@ -6,7 +6,7 @@ using Zenject;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(HealthComponent))]
-public class PlayerController : MonoBehaviour, IPlayer
+public class PlayerController : MonoBehaviour, IPlayer, IDamageable
 {
     [SerializeField]
     private GameObject weaponBarrel;
@@ -27,17 +27,17 @@ public class PlayerController : MonoBehaviour, IPlayer
     public event Action OnDeath;
 
     [Inject]
-    private void Construct(IInputHandler inputHandler, GameConfig gameConfig)
+    private void Construct(IInputHandler inputHandler, GameConfig gameConfig, HitscanWeapon weapon)
     {
         InputHandler = inputHandler;
         MovementSpeed = gameConfig.PlayerMovementSpeed;
+        this.currentWeapon = weapon;
     }
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _healthComponent = GetComponent<HealthComponent>();
-        currentWeapon = new HitscanWeapon();
         currentWeapon.SetOwner(weaponBarrel.transform);
         _healthComponent.OnDeath += OnPlayerDeath;
         animator = GetComponentInChildren<Animator>();
@@ -127,5 +127,10 @@ public class PlayerController : MonoBehaviour, IPlayer
             endPoint = raycastPoint + new Vector3(aimDirection.x * distance, aimDirection.y, aimDirection.z * distance);
         }
         lineRenderer.SetPosition(1, endPoint);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _healthComponent.TakeDamage(damage);
     }
 }

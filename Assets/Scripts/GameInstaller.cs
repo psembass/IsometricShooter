@@ -16,6 +16,8 @@ public class GameInstaller : MonoInstaller
     private UIManager uIManager;
     [SerializeField]
     private GameObject levelPlane;
+    [SerializeField]
+    private ParticlesService particlesService;
 
     public override void InstallBindings()
     {
@@ -27,6 +29,8 @@ public class GameInstaller : MonoInstaller
         // UI
         Container.BindInterfacesAndSelfTo<UIManager>().FromInstance(uIManager).AsSingle();
         // GameObjects
+        Container.BindInterfacesAndSelfTo<ParticlesService>().FromInstance(particlesService).AsSingle();
+        Container.Bind<HitscanWeapon>().FromNew().AsSingle();
         Container.Bind<GameObject>().WithId("LevelPlane").FromInstance(levelPlane);
         Container.BindInterfacesAndSelfTo<Enemy>().FromInstance(enemyPrefab).AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerController>().FromInstance(player).AsSingle(); // todo create dynamically from prefab
