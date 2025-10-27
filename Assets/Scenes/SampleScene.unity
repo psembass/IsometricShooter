@@ -776,7 +776,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   weaponBarrel: {fileID: 813735010}
-  particles: {fileID: 198175801688348628, guid: 18e3d46a571910f419addb5136294a29, type: 3}
 --- !u!143 &709111395
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1249,6 +1248,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945327021}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1023352767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1023352769}
+  - component: {fileID: 1023352768}
+  m_Layer: 0
+  m_Name: ParticleService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1023352768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023352767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2e88a73b3e3b03499a7487ef9d16dc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticlesService
+--- !u!4 &1023352769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023352767}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.59323, y: 3.39222, z: -0.60821}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1036511816 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
@@ -1434,6 +1477,7 @@ MonoBehaviour:
   player: {fileID: 709111394}
   uIManager: {fileID: 385680028}
   levelPlane: {fileID: 332334692}
+  particlesService: {fileID: 1023352768}
 --- !u!114 &1356305248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2302,3 +2346,4 @@ SceneRoots:
   - {fileID: 1334520726}
   - {fileID: 144493968}
   - {fileID: 385680027}
+  - {fileID: 1023352769}

@@ -1,8 +1,9 @@
 #HealthBar .unity-progress-bar__progress {
-    background-color: rgb(300, 0, 0);
+    background-color: rgb(255, 0, 0);
     border-radius: 4px;
 }
 
 #HealthBar .unity-progress-bar__title {
     color: white;
+    -unity-font-definition: url("project://database/Assets/Plugins/Zenject/OptionalExtras/SampleGame1%20(Beginner)/Media/Fonts/space%20age.ttf?fileID=12800000&guid=fd8f821504719f7459be663fb8591ada&type=3#space age");
 }
