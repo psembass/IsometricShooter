@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameConfig
   PlayerMovementSpeed: 3
-  maxEnemies: 30
-  enemySpawnRate: 2
+  maxEnemies: 100
+  enemySpawnRate: 1
   gunMuzzle: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
   bloodSplash: {fileID: 198321120434662062, guid: 1a8754165bafeaa44b879e6f978bb905, type: 3}
