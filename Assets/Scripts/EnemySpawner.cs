@@ -8,15 +8,19 @@ public class EnemySpawner
     private int maxEnemies = 10;
     private Transform targetTransform;
     private int enemyCount = 0;
+    private IAudioService audioService;
+    private AudioConfig audioConfig;
 
     private IObjectPool<GameObject> enemyPool;
     public event Action OnEnemyKilled;
 
-    public EnemySpawner(Enemy enemyPrefab, GameConfig gameConfig, IPlayer player)
+    public EnemySpawner(Enemy enemyPrefab, GameConfig gameConfig, IPlayer player, AudioConfig audioConfig, IAudioService audioService)
     {
         this.enemyPrefab = enemyPrefab;
         this.maxEnemies = gameConfig.maxEnemies;
         this.targetTransform = player.Transform;
+        this.audioConfig = audioConfig;
+        this.audioService = audioService;
         // Init Enemy pool
         enemyPool = new ObjectPool<GameObject>(
             () => CreateEnemy(),
@@ -33,7 +37,7 @@ public class EnemySpawner
     {
         GameObject enemyObject = GameObject.Instantiate(enemyPrefab.gameObject);
         Enemy enemy = enemyObject.GetComponent<Enemy>();
-        enemy.SetPlayerTransform(targetTransform);
+        enemy.Init(targetTransform, audioConfig, audioService);
         enemy.OnDeath += ReturnToPool;
         return enemyObject;
     }

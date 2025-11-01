@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6488af07c588c48891f3c4a7493d67, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: Assembly-CSharp::AudioConfig
+  playerFootstep:
+    Guid:
+      Data1: 2104626629
+      Data2: 1320673240
+      Data3: 1265819544
+      Data4: -2110546652
+    Path: event:/Player Footstep
+  gunShot:
+    Guid:
+      Data1: 1229941062
+      Data2: 1314029137
+      Data3: 688621209
+      Data4: 1310123851
+    Path: event:/Gun Shot
+  blood:
+    Guid:
+      Data1: 538458270
+      Data2: 1088106619
+      Data3: -622312819
+      Data4: -432986689
+    Path: event:/Blood
+  monster_attack:
+    Guid:
+      Data1: -561287923
+      Data2: 1149220232
+      Data3: -100203087
+      Data4: 1726216770
+    Path: event:/Monster/Monster Attack
+  monster_damage:
+    Guid:
+      Data1: -405569597
+      Data2: 1275000303
+      Data3: -1234208883
+      Data4: -1800814655
+    Path: event:/Monster/Monster Damage
+  monster_death:
+    Guid:
+      Data1: 1103536510
+      Data2: 1113925709
+      Data3: -668727376
+      Data4: 1251812667
+    Path: event:/Monster/Monster Death
+  monster_footstep:
+    Guid:
+      Data1: -576621054
+      Data2: 1272762452
+      Data3: 630472615
+      Data4: -826931912
+    Path: event:/Monster/Monster Footstep

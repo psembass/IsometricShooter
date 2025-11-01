@@ -2,6 +2,7 @@ using NUnit.Framework.Internal;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using Zenject;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(HealthComponent))]
@@ -18,6 +19,15 @@ public class Enemy : MonoBehaviour, IDamageable
     private float attackRate = 0.5f;
     private float lastAttackTime = 0;
     private bool isAlive = true;
+    private IAudioService audioService;
+    private AudioConfig audioConfig;
+
+    public void Init(Transform playerTransform, AudioConfig audioConfig, IAudioService audioService)
+    {
+        this.playerTransform = playerTransform;
+        this.audioConfig = audioConfig;
+        this.audioService = audioService;
+    }
 
     void Awake()
     {
@@ -50,14 +60,10 @@ public class Enemy : MonoBehaviour, IDamageable
             if (weapon.Attack(playerPos))
             {
                 animator.SetTrigger("Attack");
+                audioService.PlayOneShot(audioConfig.Monster_attack, transform.position);
                 lastAttackTime = Time.time;
             }
         }
-    }
-
-    public void SetPlayerTransform(Transform playerTransform)
-    {
-        this.playerTransform = playerTransform;
     }
 
     public void Reset()
@@ -68,6 +74,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void HandleDeath() {
         animator.SetTrigger("Death");
+        audioService.PlayOneShot(audioConfig.Monster_death, transform.position);
         // to stop from moving
         isAlive = false;
         agent.isStopped = true;
@@ -80,6 +87,12 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
+        audioService.PlayOneShot(audioConfig.Monster_damage, transform.position);
         healthComponent.TakeDamage(damage);
+    }
+
+    public void OnFootstep()
+    {
+        audioService.PlayOneShot(audioConfig.Monster_footstep, transform.position);
     }
 }

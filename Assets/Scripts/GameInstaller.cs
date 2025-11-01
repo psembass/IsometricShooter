@@ -6,6 +6,8 @@ public class GameInstaller : MonoInstaller
 {
     [SerializeField]
     private GameConfig _config;
+    [SerializeField] 
+    private AudioConfig audioConfig;
     [SerializeField]
     private InputActionAsset inputActions;
     [SerializeField]
@@ -26,6 +28,9 @@ public class GameInstaller : MonoInstaller
         Container.Bind<IInputHandler>().To<InputHandler>().FromNew().AsSingle();
         // Configs
         Container.BindInterfacesAndSelfTo<GameConfig>().FromInstance(_config).AsSingle();
+        Container.BindInterfacesAndSelfTo<AudioConfig>().FromInstance(audioConfig).AsSingle();
+        // Audio
+        Container.Bind<IAudioService>().To<FModAudioService>().FromNew().AsSingle();
         // UI
         Container.BindInterfacesAndSelfTo<UIManager>().FromInstance(uIManager).AsSingle();
         // GameObjects

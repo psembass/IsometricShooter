@@ -14,10 +14,14 @@ public class HitscanWeapon : IWeapon
     
     private RaycastHit[] raycastHits = new RaycastHit[10];
     private ParticlesService particles;
+    private IAudioService audioService;
+    private AudioConfig audioConfig;
 
-    public HitscanWeapon(ParticlesService particles)
+    public HitscanWeapon(ParticlesService particles, AudioConfig audioConfig, IAudioService audioService)
     {
         this.particles = particles;
+        this.audioConfig = audioConfig;
+        this.audioService = audioService;
     }
 
     public bool Attack(Vector3 direction)
@@ -35,6 +39,7 @@ public class HitscanWeapon : IWeapon
             if (damageable != null)
             {
                 particles.PlayEffect(ParticlesService.BLOOD, raycastHits[i].point);
+                audioService.PlayOneShot(audioConfig.Blood, raycastHits[i].point);
                 damageable.TakeDamage(damage);
             }
         }

@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
     private Camera _camera;
     private Animator animator;
     private LineRenderer lineRenderer;
+    private AudioConfig audioConfig;
+    private IAudioService audioService;
 
     private float MoveThreshold = 0.001f;
     private IWeapon currentWeapon;
@@ -27,11 +29,13 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
     public event Action OnDeath;
 
     [Inject]
-    private void Construct(IInputHandler inputHandler, GameConfig gameConfig, HitscanWeapon weapon)
+    private void Construct(IInputHandler inputHandler, GameConfig gameConfig, HitscanWeapon weapon, AudioConfig audioConfig, IAudioService audioService)
     {
         InputHandler = inputHandler;
         MovementSpeed = gameConfig.PlayerMovementSpeed;
         this.currentWeapon = weapon;
+        this.audioConfig = audioConfig;
+        this.audioService = audioService;
     }
 
     private void Awake()
@@ -82,6 +86,7 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
             if (currentWeapon.Attack(aimDirection))
             {
                 animator.SetTrigger("Shoot");
+                audioService.PlayOneShot(audioConfig.GunShot, transform.position);
             }
         }
     }
@@ -132,5 +137,10 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
     public void TakeDamage(float damage)
     {
         _healthComponent.TakeDamage(damage);
+    }
+
+    public void OnFootstep()
+    {
+        audioService.PlayOneShot(audioConfig.PlayerFootstep, transform.position);
     }
 }
