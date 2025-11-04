@@ -36,4 +36,11 @@ public class UIManager : MonoBehaviour
     {
         killCountLabel.text = "Kill Count: "+enemyKilled;
     }
+
+    public void HideControlsHint()
+    {
+        // todo different text if using Gamepad
+        Label controlsHint = hud.rootVisualElement.Q<Label>("ControlsHint");
+        controlsHint.style.display = DisplayStyle.None;
+    }
 }

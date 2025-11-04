@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,11 +14,19 @@ public class GameManager : MonoBehaviour
     private UIManager uiManager;
     private AudioConfig audioConfig;
     private IAudioService audioService;
+    private IInputHandler inputHandler;
 
     private int enemyKilled = 0;
 
     [Inject]
-    void Construct(GameConfig gameConfig, EnemySpawner enemySpawner, PlayerController player, UIManager uiManager, [Inject(Id = "LevelPlane")] GameObject levelPlane, AudioConfig audioConfig, IAudioService audioService)
+    void Construct(GameConfig gameConfig, 
+                   EnemySpawner enemySpawner, 
+                   PlayerController player, 
+                   UIManager uiManager, 
+                   [Inject(Id = "LevelPlane")] GameObject levelPlane, 
+                   AudioConfig audioConfig, 
+                   IAudioService audioService, 
+                   IInputHandler inputHandler)
     {
         this.enemySpawner = enemySpawner;
         this.playerController = player;
@@ -26,6 +35,7 @@ public class GameManager : MonoBehaviour
         this.levelPlane = levelPlane;
         this.audioConfig = audioConfig;
         this.audioService = audioService;
+        this.inputHandler = inputHandler;
     }
 
     private void Start()
@@ -36,9 +46,19 @@ public class GameManager : MonoBehaviour
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
         audioService.PlaySoundEvent(audioConfig.Main_theme);
+        StartCoroutine(HideControlHints());
         // todo Testing
         enemySpawner.SpawnEnemy(new Vector3(0, 0, 5));
         lastSpawnTime = Time.time;
+    }
+
+    private IEnumerator HideControlHints()
+    {
+        while (!inputHandler.isFiring() && inputHandler.MoveAxis() == Vector2.zero)
+        {
+            yield return null;
+        }
+        uiManager.HideControlsHint();
     }
 
     private void HandleEnemyKilled()
