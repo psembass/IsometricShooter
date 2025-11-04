@@ -29,4 +29,9 @@ public class AudioConfig : ScriptableObject
     [SerializeField]
     private EventReference monster_footstep;
     public string Monster_footstep => monster_footstep.Guid.ToString();
+
+    [Header("Music")]
+    [SerializeField]
+    private EventReference main_theme;
+    public string Main_theme => main_theme.Guid.ToString();
 }

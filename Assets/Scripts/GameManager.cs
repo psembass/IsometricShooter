@@ -11,17 +11,21 @@ public class GameManager : MonoBehaviour
     private GameObject levelPlane;
     private PlayerController playerController;
     private UIManager uiManager;
+    private AudioConfig audioConfig;
+    private IAudioService audioService;
 
     private int enemyKilled = 0;
 
     [Inject]
-    void Construct(GameConfig gameConfig, EnemySpawner enemySpawner, PlayerController player, UIManager uiManager, [Inject(Id = "LevelPlane")] GameObject levelPlane)
+    void Construct(GameConfig gameConfig, EnemySpawner enemySpawner, PlayerController player, UIManager uiManager, [Inject(Id = "LevelPlane")] GameObject levelPlane, AudioConfig audioConfig, IAudioService audioService)
     {
         this.enemySpawner = enemySpawner;
         this.playerController = player;
         this.uiManager = uiManager;
         this.enemySpawnRate = gameConfig.enemySpawnRate;
         this.levelPlane = levelPlane;
+        this.audioConfig = audioConfig;
+        this.audioService = audioService;
     }
 
     private void Start()
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviour
         UIEvents.OnRestart += Restart;
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
+        audioService.PlaySoundEvent(audioConfig.Main_theme);
         // todo Testing
         enemySpawner.SpawnEnemy(new Vector3(0, 0, 5));
         lastSpawnTime = Time.time;
@@ -53,6 +58,7 @@ public class GameManager : MonoBehaviour
     private void Restart()
     {
         // todo reload enemies and player state etc
+        audioService.StopSoundEvent(audioConfig.Main_theme);
         enemyKilled = 0;
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;

@@ -61,3 +61,10 @@ MonoBehaviour:
       Data3: 630472615
       Data4: -826931912
     Path: event:/Monster/Monster Footstep
+  main_theme:
+    Guid:
+      Data1: -1544661111
+      Data2: 1117648746
+      Data3: 1191992482
+      Data4: -1325108120
+    Path: event:/Music/Music
