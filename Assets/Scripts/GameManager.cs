@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private IInputHandler inputHandler;
 
     private int enemyKilled = 0;
+    private bool isPaused = false;
 
     [Inject]
     void Construct(GameConfig gameConfig, 
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
         // Subscribe to game events
         playerController.OnDeath += GameOver;
         UIEvents.OnRestart += Restart;
+        UIEvents.OnPause += Pause;
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
         audioService.PlaySoundEvent(audioConfig.Main_theme);
@@ -83,6 +85,22 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
         Time.timeScale = 1f;
         playerController.IsPaused = false;
+    }
+
+    private void Pause()
+    {
+        if (!isPaused)
+        {
+            Time.timeScale = 0f;
+            playerController.IsPaused = true;
+            isPaused = true;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            playerController.IsPaused = false;
+            isPaused = false;
+        }
     }
 
     // Update is called once per frame

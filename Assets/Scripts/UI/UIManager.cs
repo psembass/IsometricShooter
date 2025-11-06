@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     private UIDocument hud;
 
     private Label killCountLabel;
+    private Label pauseLabel;
 
     private void Awake()
     {
@@ -19,6 +20,9 @@ public class UIManager : MonoBehaviour
         gameOverMenu.rootVisualElement.style.display = DisplayStyle.None;
 
         killCountLabel = hud.rootVisualElement.Q<Label>("KillCountLabel");
+        pauseLabel = hud.rootVisualElement.Q<Label>("PauseHint");
+        pauseLabel.style.display = DisplayStyle.None;
+        UIEvents.OnPause += ShowOrHidePause;
     }
 
     public void ShowGameOverMenu()
@@ -43,4 +47,10 @@ public class UIManager : MonoBehaviour
         Label controlsHint = hud.rootVisualElement.Q<Label>("ControlsHint");
         controlsHint.style.display = DisplayStyle.None;
     }
+
+    private void ShowOrHidePause()
+    {
+        pauseLabel.style.display = pauseLabel.style.display == DisplayStyle.None ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
 }
