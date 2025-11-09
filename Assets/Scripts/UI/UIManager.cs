@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 
     private Label killCountLabel;
     private Label pauseLabel;
+    private Label controlsHint;
 
     private void Awake()
     {
@@ -43,8 +44,6 @@ public class UIManager : MonoBehaviour
 
     public void HideControlsHint()
     {
-        // todo different text if using Gamepad
-        Label controlsHint = hud.rootVisualElement.Q<Label>("ControlsHint");
         controlsHint.style.display = DisplayStyle.None;
     }
 
@@ -53,4 +52,16 @@ public class UIManager : MonoBehaviour
         pauseLabel.style.display = pauseLabel.style.display == DisplayStyle.None ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
+    public void ShowControls(bool gamepad)
+    {
+        if (gamepad)
+        {
+            controlsHint = hud.rootVisualElement.Q<Label>("ControlsGamepadHint");
+        }
+        else
+        {
+            controlsHint = hud.rootVisualElement.Q<Label>("ControlsHint");
+        }
+        controlsHint.style.display = DisplayStyle.Flex;
+    }
 }

@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
     private LineRenderer lineRenderer;
     private AudioConfig audioConfig;
     private IAudioService audioService;
+    private Vector2 lastLookPoint = Vector2.zero;
+    private Vector3 lastAimDirection = Vector3.zero;
 
     private float MoveThreshold = 0.001f;
     private IWeapon currentWeapon;
@@ -104,17 +106,34 @@ public class PlayerController : MonoBehaviour, IPlayer, IDamageable
     // Returns aim direction normalized
     private Vector3 GetAimDirection()
     {
+        // Aim direction from gamepad
+        Vector2 lookVector = InputHandler.LookVector();
+        if (lookVector != Vector2.zero)
+        {
+            lastAimDirection = _camera.transform.TransformDirection(lookVector);
+            lastAimDirection.y = 0f;
+            lastAimDirection.Normalize();
+            return lastAimDirection;
+        }
+        Vector2 look = InputHandler.LookPoint();
+        if (look == lastLookPoint)
+        {
+            // If no new data from mouse - keep last gamepad/mouse aim direction
+            return lastAimDirection;
+        }
+        // Aim direction from mouse
+        lastLookPoint = look;
         Vector3 start = transform.position;
-        Vector2 look = InputHandler.LookAxis();
         Ray ray = _camera.ScreenPointToRay(look);
         Plane plane = new Plane(Vector3.up, start);
         float rayDistance;
         if (plane.Raycast(ray, out rayDistance))
         {
             Vector3 point = ray.GetPoint(rayDistance);
-            return (point - start).normalized;
+            lastAimDirection = (point - start).normalized;
+            return lastAimDirection;
         }
-        return Vector3.zero;
+        return lastAimDirection;
     }
 
     private void RenderAim(Vector3 aimDirection)

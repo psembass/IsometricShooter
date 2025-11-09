@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         UIEvents.OnPause += OnPausePressed;
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
+        uiManager.ShowControls(inputHandler.GamepadConnected());
         PauseGame();
         StartCoroutine(StartGameAfterInput());
     }

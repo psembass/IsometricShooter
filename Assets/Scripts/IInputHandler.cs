@@ -3,6 +3,8 @@
 public interface IInputHandler
 {
 	Vector2 MoveAxis();
-	Vector2 LookAxis();
-	bool isFiring();
+	Vector2 LookPoint();
+    Vector2 LookVector();
+    bool isFiring();
+    bool GamepadConnected();
 }
