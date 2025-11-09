@@ -6,7 +6,7 @@ public class HitscanWeapon : IWeapon
 {
     private Transform _transform;
     private float maxDistance = 15f;
-    private float damage = 20f;
+    private float damage = 25f;
     private float lastShootTime = 0;
 
     private float shootRate = 0.2f;

@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -44,23 +43,25 @@ public class GameManager : MonoBehaviour
         // Subscribe to game events
         playerController.OnDeath += GameOver;
         UIEvents.OnRestart += Restart;
-        UIEvents.OnPause += Pause;
+        UIEvents.OnPause += OnPausePressed;
         enemySpawner.OnEnemyKilled += HandleEnemyKilled;
         uiManager.UpdateKillCount(enemyKilled);
-        audioService.PlaySoundEvent(audioConfig.Main_theme);
-        StartCoroutine(HideControlHints());
-        // todo Testing
-        enemySpawner.SpawnEnemy(new Vector3(0, 0, 5));
-        lastSpawnTime = Time.time;
+        PauseGame();
+        StartCoroutine(StartGameAfterInput());
     }
 
-    private IEnumerator HideControlHints()
+    private IEnumerator StartGameAfterInput()
     {
-        while (!inputHandler.isFiring() && inputHandler.MoveAxis() == Vector2.zero)
+        // Wait for user input
+        while (!inputHandler.isFiring())
         {
             yield return null;
         }
         uiManager.HideControlsHint();
+        audioService.PlaySoundEvent(audioConfig.Main_theme);
+        enemySpawner.SpawnEnemy(new Vector3(0, 0, 7));
+        lastSpawnTime = Time.time;
+        ResumeGame();
     }
 
     private void HandleEnemyKilled()
@@ -71,10 +72,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        // stop the game
-        Time.timeScale = 0f;
-        // stop player input
-        playerController.IsPaused = true;
+        PauseGame();
         uiManager.ShowGameOverMenu();
     }
     private void Restart()
@@ -83,24 +81,35 @@ public class GameManager : MonoBehaviour
         audioService.StopSoundEvent(audioConfig.Main_theme);
         enemyKilled = 0;
         SceneManager.LoadScene(0);
-        Time.timeScale = 1f;
-        playerController.IsPaused = false;
+        ResumeGame();
     }
 
-    private void Pause()
+    private void OnPausePressed()
     {
         if (!isPaused)
         {
-            Time.timeScale = 0f;
-            playerController.IsPaused = true;
+            PauseGame();
             isPaused = true;
         }
         else
         {
-            Time.timeScale = 1f;
-            playerController.IsPaused = false;
+            ResumeGame();
             isPaused = false;
         }
+    }
+
+    private void PauseGame()
+    {
+        // stop the game
+        Time.timeScale = 0f;
+        // stop player input
+        playerController.IsPaused = true;
+    }
+
+    private void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        playerController.IsPaused = false;
     }
 
     // Update is called once per frame
